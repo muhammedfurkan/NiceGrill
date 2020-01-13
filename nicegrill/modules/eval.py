@@ -23,6 +23,7 @@ import sys
 import html
 import textwrap
 import asyncio
+from io import StringIO
 
 
 class Python:
@@ -37,6 +38,8 @@ class Python:
         args = utils.get_arg(message).strip()
         caption = "<b>⬤ Evaluated expression:</b>\n<code>{}</code>\n\n<b>⬤ Result:</b>\n".format(
             args)
+        preserve_stdout = sys.stdout
+        sys.stdout = StringIO()
         try:
             res = str(await meval(args, globals(), **await Python.funcs(message)))
         except Exception:
@@ -44,8 +47,12 @@ class Python:
                 args)
             etype, value, tb = sys.exc_info()
             res = ''.join(traceback.format_exception(etype, value, None, 0))
+            sys.stdout = preserve_stdout
+        val = sys.stdout.getvalue()
+        printed = f"<b>⬤ Printed Result:</b>\n<code>{val if val else 'None'}</code>"
+        sys.stdout = preserve_stdout
         try:
-            await message.edit(caption + f"<code>{html.escape(res)}</code>")
+            await message.edit(caption + f"<code>{html.escape(res)}</code>\n\n{printed}")
         except MessageTooLongError:
             res = textwrap.wrap(res, 4096-len(caption))
             await message.edit(caption + f"<code>{res[0]}</code>")
