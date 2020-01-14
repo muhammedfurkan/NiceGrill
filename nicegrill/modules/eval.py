@@ -48,7 +48,10 @@ class Python:
             etype, value, tb = sys.exc_info()
             res = ''.join(traceback.format_exception(etype, value, None, 0))
             sys.stdout = preserve_stdout
-        val = sys.stdout.getvalue()
+        try:
+            val = sys.stdout.getvalue()
+        except AttributeError:
+            val = None
         printed = f"<b>⬤ Printed Result:</b>\n<code>{html.escape(val) if val else 'None'}</code>"
         sys.stdout = preserve_stdout
         try:
