@@ -49,10 +49,10 @@ class Python:
             res = ''.join(traceback.format_exception(etype, value, None, 0))
             sys.stdout = preserve_stdout
         val = sys.stdout.getvalue()
-        printed = f"<b>⬤ Printed Result:</b>\n<code>{val if val else 'None'}</code>"
+        printed = f"<b>⬤ Printed Result:</b>\n<code>{html.escape(val) if val else 'None'}</code>"
         sys.stdout = preserve_stdout
         try:
-            await message.edit(caption + f"<code>{html.escape(res)}</code>\n\n{html.escape(printed)}")
+            await message.edit(caption + f"<code>{html.escape(res)}</code>\n\n{printed}")
         except MessageTooLongError:
             res = textwrap.wrap(res, 4096-len(caption))
             await message.edit(caption + f"<code>{res[0]}</code>")
