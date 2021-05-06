@@ -1,0 +1,33 @@
+{
+  "name": "NiceGrill",
+  "description": "NiceGrill, a telegram userbot with MongoDB database",
+  "env": {
+    "API_ID": {
+      "description": "Get this value from my.telegram.org.",
+      "required": true
+    },
+    "API_HASH": {
+      "description": "Get this value from my.telegram.org.",
+      "required": true
+    },
+    "SESSION": {
+      "description": "Get this value by running [python generate_session.py] in Termux or local system.",
+      "required": true
+    },
+    "MONGO_URI": {
+      "description": "This is for the database account, you can obtain it from mongodb.com. For more info: @emilygang in telegram.",
+      "value": true
+    }
+  },
+  "buildpacks": [
+    {
+      "url": "https://github.com/jonathanong/heroku-buildpack-ffmpeg-latest"
+    },
+    {
+      "url": "heroku/python"
+    },
+    {
+      "url": "https://github.com/sendwithus/lxml-buildpack"
+    }
+  ]
+}
